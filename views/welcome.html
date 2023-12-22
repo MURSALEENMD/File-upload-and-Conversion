@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Welcome</title>
+</head>
+<body align="center" bgcolor="#CFD851">
+ <h1>Welcome to our site
+ <br>
+ File Upload
+ </h1>
+ <hr>
+ <script>
+ function validate(){
+ var input_file = document.getElementById('myfile');
+ var filepath = input_file.value;
+ var allowedExtensions = /(\.pdf|\.doc\.docx|\.xls|\.xlsx)$/i;
+ if (!allowedExtensions.exec(filepath)) {
+ alert('Invalid file type');
+ input_file.value = '';
+ return false;
+ }
+ else {
+ return true;
+ }
+ }
+ </script>
+ <h3>Welcome {{".username"}}</h3>
+ 
+ <form method="POST" action="/account/download">
+ <h3>Uploaded File Details</h3>
+ Total no of files uploaded : {{.file_no}}
+ <br><br>
+ {{if .file_no}}
+ Select a file : <select name="file_name">
+ {{range $element := .file_list}}
+ <option value="{{$element}}">$element</option>
+ {{end}}
+ </select> &nbsp;&nbsp;&nbsp;
+ Chose your action:
+ <input type="radio" id="download" name="choice" value="download">
+ <label for="download">Download</label>
+ <input type="radio" id="convert" name="choice" value="convert">
+ <label for="convert">Convert to pdf</label>
+ <input type="radio" id="delete" name="choice" value="delete">
+ <label for="delete">Delete</label> &nbsp;&nbsp;
+ <input type="submit" value="Submit">
+ {{end}}
+ </form>
+ <br><br>
+ <form id="form1" enctype="multipart/form-data"
+ action="/account/upload"
+ method="post">
+ <h3> New File Upload (Supported file formats are pdf,doc,docx,xls,xlsx)</h3><br>
+ Select new file to upload: <input type="file" name="myfile" id="myfile" onchange="return validate()"/>
+ <input type="submit" value="Upload"/>
+ </form>
+ <br>
+ <a href="/account/logout">Logout</a>
+</body>
+</html>
